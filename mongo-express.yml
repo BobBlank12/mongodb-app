@@ -20,6 +20,8 @@ spec:
         ports:
         - containerPort: 8081
         env:
+        - name: ME_CONFIG_SITE_BASEURL
+          value: "/express/"
         - name: ME_CONFIG_MONGODB_SERVER
           valueFrom:
             configMapKeyRef:
@@ -51,21 +53,17 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: mongo-express-ingress
+  name: mongo-express-ingress 
   annotations:
     kubernetes.io/ingress.class: "nginx"
 spec:
   rules:
   - http:
-     paths:
-     - path: /
-       pathType: Prefix
-       backend:
-         service: 
-           name: mongo-express-service
-           port: 
-             number: 8081
-# Get the IP of minikube or the ingress with
-# kubectl get ingress and 
-# add your minikube IP to your /etc/hosts file
-# or use your minikube ip in your browser.
+      paths:
+      - path: /express
+        pathType: Prefix
+        backend:
+          service:
+            name: mongo-express-service
+            port:
+              number: 8081
